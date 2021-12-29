@@ -1,3 +1,4 @@
+import os
 import requests
 import urllib.request
 import time
@@ -50,6 +51,13 @@ total = str(
     int(courts) + int(level1) + int(level2) + int(level3) + int(ph) + int(track)
 )
 
+with open("NickData.csv",'r') as f:
+    with open("NickDataX.csv",'w') as f1:
+        next(f)
+        for line in f:
+            f1.write(line)
+os.remove("NickData.csv")
+os.rename("NickDataX.csv", "NickData.csv")
 data = [
     now.strftime("%Y-%m-%d"),
     now.strftime("%H:%M"),

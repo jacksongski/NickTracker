@@ -46,13 +46,6 @@ jQuery.ajax({
       } else {
         labels.push("");
       }
-      //   if (date != allData[i].date) {
-      //     date = allData[i].date;
-      //     labels.push(allData[i].date);
-      //     console.log(date);
-      //   } else {
-      //     labels.push("");
-      //   }
     }
     graphSpecs = {
       labels: labels,

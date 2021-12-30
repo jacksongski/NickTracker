@@ -105,7 +105,6 @@ jQuery.ajax({
       },
     };
     myChart = new Chart(document.getElementById("myChart"), config);
-    console.log(allData[allData.length - 2].time);
     recentTime = allData[allData.length - 2].time.split(":");
     if (recentTime[0] >= 12) {
       recentTime[1] += " p.m.";

@@ -114,7 +114,11 @@ jQuery.ajax({
     }
     recentTime[0] = ((parseInt(recentTime[0]) + 11) % 12) + 1 + ":";
     document.getElementById("lastUpdated").innerHTML +=
-      allData[allData.length - 2].date + " at " + recentTime[0] + recentTime[1];
+      " " +
+      allData[allData.length - 2].date +
+      " at " +
+      recentTime[0] +
+      recentTime[1];
   },
   error: function (jqXHR, textStatus, errorThrow) {
     console.log(textStatus);

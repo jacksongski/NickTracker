@@ -7,7 +7,40 @@
 </html>
 <body>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
+  <table>
+    <tr>
+      <button id="total" aria-pressed="true" onclick="btnFunc('total')">
+        Totals
+      </button>
+      <button id="l1" onclick="btnFunc('l1')">Level 1</button>
+      <button id="l2" onclick="btnFunc('l2')">Level 2</button>
+      <button id="l3" onclick="btnFunc('l3')">Level 3</button>
+      <button id="ph" onclick="btnFunc('ph')">Power House</button>
+      <button id="track" onclick="btnFunc('track')">Track</button>
+      <button id="courts" onclick="btnFunc('courts')">Courts</button>
+    </tr>
+  </table>
+  <br />
   <canvas id="myChart" width="400" height="400"></canvas>
   <script src="./graph.js"></script>
 </body>
+
+<style>
+  button {
+    color: rgb(59, 59, 59);
+    background-color: rgb(255, 99, 132);
+    border: 0px solid;
+    border-radius: 10%;
+    border-color: rgb(0, 0, 0);
+    padding: 2%;
+    margin: 1px;
+    box-shadow: 2px 2px rgb(105, 40, 54);
+  }
+  [aria-pressed="true"] {
+    background-color: rgb(105, 40, 54);
+    box-shadow: 1px 1px rgb(105, 40, 54);
+    color: white;
+  }
+</style>

@@ -59,7 +59,7 @@ with open("NickData.csv",'r') as f:
 os.remove("NickData.csv")
 os.rename("NickDataX.csv", "NickData.csv")
 data = [
-    now.strftime("%Y-%m-%d"),
+    now.strftime("%m/%d%Y"),
     now.strftime("%H:%M"),
     level1,
     level2,
@@ -75,5 +75,5 @@ with open("NickData.csv", "a", newline="") as file:
     file.close()
 
 
-print(now.strftime("%Y-%m-%d"))
+print(now.strftime("%m/%d/%Y"))
 print(now.strftime("%H:%M"))

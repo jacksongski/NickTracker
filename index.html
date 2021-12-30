@@ -8,39 +8,104 @@
 <body>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-
-  <table>
-    <tr>
+  <div id="container">
+    <div id="btnGroup">
+      <button id="l1" onclick="btnFunc('l1')">LEVEL 1</button>
+      <button id="l2" onclick="btnFunc('l2')">LEVEL 2</button>
+      <button id="l3" onclick="btnFunc('l3')">LEVEL 3</button>
+      <button id="ph" onclick="btnFunc('ph')">POWER HOUSE</button>
+      <button id="track" onclick="btnFunc('track')">TRACK</button>
+      <button id="courts" onclick="btnFunc('courts')">COURTS</button>
       <button id="total" aria-pressed="true" onclick="btnFunc('total')">
-        Totals
+        TOTAL
       </button>
-      <button id="l1" onclick="btnFunc('l1')">Level 1</button>
-      <button id="l2" onclick="btnFunc('l2')">Level 2</button>
-      <button id="l3" onclick="btnFunc('l3')">Level 3</button>
-      <button id="ph" onclick="btnFunc('ph')">Power House</button>
-      <button id="track" onclick="btnFunc('track')">Track</button>
-      <button id="courts" onclick="btnFunc('courts')">Courts</button>
-    </tr>
-  </table>
-  <br />
-  <canvas id="myChart" width="400" height="400"></canvas>
+    </div>
+    <div id="text">
+      <p id="lastUpdated">Last Updated on </p>
+    </div>
+    <br />
+    <canvas id="myChart"></canvas>
+  </div>
+
   <script src="./graph.js"></script>
 </body>
 
 <style>
   button {
-    color: rgb(59, 59, 59);
-    background-color: rgb(255, 99, 132);
-    border: 0px solid;
-    border-radius: 10%;
-    border-color: rgb(0, 0, 0);
-    padding: 2%;
-    margin: 1px;
-    box-shadow: 2px 2px rgb(105, 40, 54);
+    color: rgb(232, 234, 246);
+    background-color: rgb(214, 0, 0);
+    border: 1px solid;
+    border-color: rgb(156, 0, 0);
+    padding: 10px;
+    margin: 0px;
+    box-shadow: 0px 6px rgb(105, 40, 54);
+    width: 125px;
+    cursor: pointer;
+    transition-duration: 0.3s;
+    font-family: Helvetica, sans-serif;
   }
+
+  button:hover {
+    background-color: rgb(255, 81, 49);
+  }
+
   [aria-pressed="true"] {
-    background-color: rgb(105, 40, 54);
-    box-shadow: 1px 1px rgb(105, 40, 54);
-    color: white;
+    background-color: rgb(156, 0, 0);
+    box-shadow: 0px 2px rgb(43, 0, 0);
+    color: rgb(232, 234, 246);
+    transform: translateY(4px);
   }
+
+  [aria-pressed="true"]:hover {
+    background-color: rgb(156, 0, 0);
+    box-shadow: 0px 2px rgb(43, 0, 0);
+    color: rgb(232, 234, 246);
+    cursor: default;
+  }
+
+  #l1 {
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+  }
+  #total {
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+  }
+  #lastUpdated {
+    margin: 10px;
+    padding: 0px;
+  }
+
+  #myChart {
+    margin: 0px;
+    width: 50%;
+    height: 50%;
+  }
+  #container {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    width: 95%;
+    height: 85%;
+  }
+  #btnGroup {
+    display: flex;
+    justify-content: center;
+  }
+  #text {
+    display: flex;
+    justify-content: right;
+    margin: 0px;
+    padding: 0px;
+  }
+  /* 
+  colors: 
+  rgb(214, 0, 0)
+  rgb(255, 81, 49)
+  rgb(156, 0, 0)
+
+  rgb(26, 35, 126)
+  rgb(83, 75, 174)
+  rgb(0, 0, 81)
+   */
 </style>

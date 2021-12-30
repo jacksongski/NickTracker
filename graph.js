@@ -41,7 +41,11 @@ jQuery.ajax({
     labels = [];
     date = "";
     for (i = 0; i < allData.length; i++) {
-      labels.push(allData[i].date);
+      if (i % 20 == 0) {
+        labels.push(allData[i].date);
+      } else {
+        labels.push("");
+      }
       //   if (date != allData[i].date) {
       //     date = allData[i].date;
       //     labels.push(allData[i].date);
@@ -54,8 +58,11 @@ jQuery.ajax({
       labels: labels,
       datasets: [
         {
-          backgroundColor: "rgb(255, 99, 132)",
-          borderColor: "rgb(255, 99, 132)",
+          backgroundColor: "rgb(255, 81, 49, .3)",
+          borderColor: "rgb(156, 0, 0)",
+          pointBackgroundColor: "rgb(214, 0, 0)",
+          hoverBackgroundColor: "rgb(26, 35, 126)",
+          fill: true,
           data: graphData,
         },
       ],
@@ -65,10 +72,19 @@ jQuery.ajax({
       type: "line",
       data: graphSpecs,
       options: {
+        maintainAspectRatio: false,
+        responsive: true,
         plugins: {
           tooltip: {
             displayColors: false,
             backgroundColor: "rgba(20, 40, 50, 0.8)",
+            titleFont: {
+              weight: "normal",
+            },
+            bodyAlign: "center",
+            bodyFont: {
+              weight: "bold",
+            },
             callbacks: {
               title: function (context) {
                 index = context[0].dataIndex;
@@ -96,6 +112,16 @@ jQuery.ajax({
       },
     };
     myChart = new Chart(document.getElementById("myChart"), config);
+    console.log(allData[allData.length - 2].time);
+    recentTime = allData[allData.length - 2].time.split(":");
+    if (recentTime[0] >= 12) {
+      recentTime[1] += " p.m.";
+    } else {
+      recentTime[1] += " a.m.";
+    }
+    recentTime[0] = ((parseInt(recentTime[0]) + 11) % 12) + 1 + ":";
+    document.getElementById("lastUpdated").innerHTML +=
+      allData[allData.length - 2].date + " at " + recentTime[0] + recentTime[1];
   },
   error: function (jqXHR, textStatus, errorThrow) {
     console.log(textStatus);

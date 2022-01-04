@@ -8,6 +8,12 @@ from selenium import webdriver
 from openpyxl import load_workbook
 import pytz
 from csv import writer
+import git
+
+repo = git.Repo('https://github.com/jacksongski/NickTracker.git')
+print(repo.remotes.origin.pull())
+
+
 
 now = datetime.now(pytz.timezone("US/Central"))
 if (

@@ -78,6 +78,5 @@ print(now.strftime("%m/%d/%Y"))
 print(now.strftime("%H:%M"))
 
 repo.index.add(['NickData.csv'])
-# Provide a commit message
 repo.index.commit('Data upload')
 print(repo.remotes.origin.push())

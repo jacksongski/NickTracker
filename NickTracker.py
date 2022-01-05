@@ -10,18 +10,13 @@ import pytz
 from csv import writer
 import git
 
-repo = git.Repo('https://github.com/jacksongski/NickTracker.git')
+repo = git.Repo('./')
 print(repo.remotes.origin.pull())
 
-
-
 now = datetime.now(pytz.timezone("US/Central"))
-if (
-    now.strftime("%A") == "Monday"
-    or now.strftime("%A") == "Tuesday"
-    or now.strftime("%A") == "Wednesday"
-    or now.strftime("%A") == "Thursday"
-):
+if (now.strftime("%A") == "Monday" or now.strftime("%A") == "Tuesday"
+        or now.strftime("%A") == "Wednesday"
+        or now.strftime("%A") == "Thursday"):
     if int(now.strftime("%H")) < 6:
         print("Nick is closed")
         exit()
@@ -43,7 +38,6 @@ driver.get("https://recwell.wisc.edu/locations/nick/")
 time.sleep(1)
 soup = BeautifulSoup(driver.page_source, "html.parser")
 
-
 level1 = (soup.select("p")[9].text).partition(" ")[0]
 level2 = (soup.select("p")[12].text).partition(" ")[0]
 level3 = (soup.select("p")[15].text).partition(" ")[0]
@@ -54,11 +48,11 @@ court36 = (soup.select("p")[27].text).partition(" ")[0]
 court78 = (soup.select("p")[30].text).partition(" ")[0]
 courts = str(int(court12) + int(court36) + int(court78))
 total = str(
-    int(courts) + int(level1) + int(level2) + int(level3) + int(ph) + int(track)
-)
+    int(courts) + int(level1) + int(level2) + int(level3) + int(ph) +
+    int(track))
 
-with open("NickData.csv",'r') as f:
-    with open("NickDataX.csv",'w') as f1:
+with open("NickData.csv", 'r') as f:
+    with open("NickDataX.csv", 'w') as f1:
         next(f)
         for line in f:
             f1.write(line)
@@ -80,6 +74,10 @@ with open("NickData.csv", "a", newline="") as file:
     writer_object.writerow(data)
     file.close()
 
-
 print(now.strftime("%m/%d/%Y"))
 print(now.strftime("%H:%M"))
+
+repo.index.add(['NickData.csv'])
+# Provide a commit message
+repo.index.commit('Data upload')
+print(repo.remotes.origin.push())

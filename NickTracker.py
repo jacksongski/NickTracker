@@ -8,6 +8,7 @@ from selenium import webdriver
 from openpyxl import load_workbook
 import pytz
 from csv import writer
+import csv
 import git
 
 repo = git.Repo('./')
@@ -39,23 +40,14 @@ time.sleep(1)
 soup = BeautifulSoup(driver.page_source, "html.parser")
 
 
-level1 = (soup.select("p")[9].text).partition(" ")[0]
-level2 = (soup.select("p")[12].text).partition(" ")[0]
-level3 = (soup.select("p")[15].text).partition(" ")[0]
-ph = (soup.select("p")[18].text).partition(" ")[0]
-track = (soup.select("p")[21].text).partition(" ")[0]
-court12 = (soup.select("p")[24].text).partition(" ")[0]
-court36 = (soup.select("p")[27].text).partition(" ")[0]
-court78 = (soup.select("p")[30].text).partition(" ")[0]
-
-print(level1)
-print(level2)
-print(level3)
-print(ph)
-print(track)
-print(court12)
-print(court36)
-print(court78)
+level1 = (soup.select("p")[12].text).partition(" ")[0]
+level2 = (soup.select("p")[15].text).partition(" ")[0]
+level3 = (soup.select("p")[18].text).partition(" ")[0]
+ph = (soup.select("p")[21].text).partition(" ")[0]
+track = (soup.select("p")[24].text).partition(" ")[0]
+court12 = (soup.select("p")[27].text).partition(" ")[0]
+court36 = (soup.select("p")[30].text).partition(" ")[0]
+court78 = (soup.select("p")[33].text).partition(" ")[0]
 
 courts = str(int(court12) + int(court36) + int(court78))
 total = str(
@@ -63,6 +55,10 @@ total = str(
     int(track))
 
 with open("NickData.csv", 'r') as f:
+    csv = list(csv.reader(f))
+    if total == csv[199][8] and courts == csv[199][7]:
+        print("No new data.")
+        exit()
     with open("NickDataX.csv", 'w') as f1:
         next(f)
         for line in f:

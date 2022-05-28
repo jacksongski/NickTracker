@@ -11,8 +11,8 @@ from csv import writer
 import csv
 import git
 
+os.chdir("/home/jacksongski/Projects/NickTracker")
 repo = git.Repo('./')
-print(repo.remotes.origin.pull())
 
 now = datetime.now(pytz.timezone("US/Central"))
 if (now.strftime("%A") == "Monday" or now.strftime("%A") == "Tuesday"
@@ -86,9 +86,7 @@ with open("NickData.csv", "a", newline="") as file:
     writer_object.writerow(data)
     file.close()
 
-print(now.strftime("%m/%d/%Y"))
 print(now.strftime("%H:%M"))
 
 repo.index.add(['NickData.csv'])
 repo.index.commit('Data upload')
-print(repo.remotes.origin.push())

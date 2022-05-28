@@ -54,11 +54,16 @@ total = str(
     int(courts) + int(level1) + int(level2) + int(level3) + int(ph) +
     int(track))
 
-with open("NickData.csv", 'r') as f:
-    csv = list(csv.reader(f))
+with open("NickData.csv", 'r') as to_read:
+    csv = list(csv.reader(to_read))
     if total == csv[199][8] and courts == csv[199][7]:
         print("No new data.")
         exit()
+    if csv[199][8] == 0 and csv[199][7] == 0:
+        print("Data not fetched correctly.")
+        exit()
+
+with open("NickData.csv", 'r') as f:
     with open("NickDataX.csv", 'w') as f1:
         next(f)
         for line in f:

@@ -13,6 +13,7 @@ import git
 
 os.chdir("/home/jacksongski/Projects/NickTracker")
 repo = git.Repo('./')
+repo.remotes.origin.pull()
 
 now = datetime.now(pytz.timezone("US/Central"))
 if (now.strftime("%A") == "Monday" or now.strftime("%A") == "Tuesday"
@@ -90,3 +91,4 @@ print(now.strftime("%H:%M"))
 
 repo.index.add(['NickData.csv'])
 repo.index.commit('Data upload')
+repo.remotes.origin.push()

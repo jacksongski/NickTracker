@@ -3,14 +3,22 @@ import sys
 from datetime import datetime
 import pytz
 from selenium import webdriver
-from webdriver_manager.chrome import ChromeDriverManager
+# from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
 from bs4 import BeautifulSoup
 import time
 import os
-from dotenv import load_dotenv
+from dotenv import main
 
-load_dotenv()
+main.load_dotenv()
+
+# print(os.getenv('USERNAME'))
+# print(os.getenv('PASSWORD'))
+# print(os.getenv('DATABASE'))
+# print(os.getenv('HOST'))
+# exit()
+
 
 # check for necessary fetch
 now = datetime.now(pytz.timezone("US/Central"))
@@ -19,7 +27,11 @@ if int(now.strftime("%H")) < 6:
     exit()
 
 # establish site connection
-driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
+options = Options()
+options.BinaryLocation = "/usr/bin/chromium-browser"
+driver_path = "/usr/bin/chromedriver"
+driver = webdriver.Chrome(options=options, service=Service(driver_path))
+# driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
 driver.get("https://recwell.wisc.edu/locations/nick/")
 time.sleep(5)
 soup = BeautifulSoup(driver.page_source, "html.parser")
@@ -39,12 +51,16 @@ time = datetime.now().strftime("%H:%M:%S")
 # connect to server
 try:
     conn = mariadb.connect(
-        user=os.getenv('USER'),
+        user=os.getenv('USER_TOKEN'),
+        # user='u488779263_jacksongski',
         password=os.getenv('PASSWORD'),
+        # password='database4Gsk!',
         host=os.getenv('HOST'),
+        # host='sql734.main-hosting.eu',
         port=3306,
         database=os.getenv('DATABASE')
-    )
+        # database='u488779263_gliski'
+)
 except mariadb.Error as e:
     print(f"Error connecting to MariaDB Platform: {e}")
     sys.exit(1)

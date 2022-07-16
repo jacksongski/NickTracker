@@ -1,94 +1,79 @@
-import os
-import requests
-import urllib.request
-import time
+import mariadb
+import sys
 from datetime import datetime
-from bs4 import BeautifulSoup
-from selenium import webdriver
-from openpyxl import load_workbook
 import pytz
-from csv import writer
-import csv
-import git
+from selenium import webdriver
+from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.chrome.service import Service
+from bs4 import BeautifulSoup
+import time
+import os
+from dotenv import load_dotenv
 
-os.chdir("/home/jacksongski/Projects/NickTracker")
-repo = git.Repo('./')
-repo.remotes.origin.pull()
+load_dotenv()
 
+# check for necessary fetch
 now = datetime.now(pytz.timezone("US/Central"))
-if (now.strftime("%A") == "Monday" or now.strftime("%A") == "Tuesday"
-        or now.strftime("%A") == "Wednesday"
-        or now.strftime("%A") == "Thursday"):
-    if int(now.strftime("%H")) < 6:
-        print("Nick is closed")
-        exit()
-if now.strftime("%A") == "Friday":
-    if int(now.strftime("%H")) < 6 or int(now.strftime("%H")) > 22:
-        print("Nick is closed")
-        exit()
-if now.strftime("%A") == "Saturday":
-    if int(now.strftime("%H")) < 8 or int(now.strftime("%H")) > 22:
-        print("Nick is closed")
-        exit()
-if now.strftime("%A") == "Sunday":
-    if int(now.strftime("%H")) < 8:
-        print("Nick is closed")
-        exit()
+if int(now.strftime("%H")) < 6:
+    print("Nick is closed.")
+    exit()
 
-driver = webdriver.Chrome()
+# establish site connection
+driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
 driver.get("https://recwell.wisc.edu/locations/nick/")
-time.sleep(1)
+time.sleep(5)
 soup = BeautifulSoup(driver.page_source, "html.parser")
 
+# parse html
+content = soup.find_all("span", class_="tracker-current-count")
+data = []
+for el in content:
+    data.append(int(el.getText()))
 
-level1 = (soup.select("p")[12].text).partition(" ")[0]
-level2 = (soup.select("p")[15].text).partition(" ")[0]
-level3 = (soup.select("p")[18].text).partition(" ")[0]
-ph = (soup.select("p")[21].text).partition(" ")[0]
-track = (soup.select("p")[24].text).partition(" ")[0]
-court12 = (soup.select("p")[27].text).partition(" ")[0]
-court36 = (soup.select("p")[30].text).partition(" ")[0]
-court78 = (soup.select("p")[33].text).partition(" ")[0]
+# vars
+courts = sum(data[5:8])
+total = sum(data[:])
+date = datetime.now().strftime("%Y-%m-%d")
+time = datetime.now().strftime("%H:%M:%S")
 
-courts = str(int(court12) + int(court36) + int(court78))
-total = str(
-    int(courts) + int(level1) + int(level2) + int(level3) + int(ph) +
-    int(track))
+# connect to server
+try:
+    conn = mariadb.connect(
+        user=os.getenv('USER'),
+        password=os.getenv('PASSWORD'),
+        host=os.getenv('HOST'),
+        port=3306,
+        database=os.getenv('DATABASE')
+    )
+except mariadb.Error as e:
+    print(f"Error connecting to MariaDB Platform: {e}")
+    sys.exit(1)
 
-with open("NickData.csv", 'r') as to_read:
-    csv = list(csv.reader(to_read))
-    if total == csv[199][8] and courts == csv[199][7]:
+# rewrite database
+cur = conn.cursor()
+try:
+
+    # check for duplicate data
+    cur.execute("SELECT * FROM `NickData` LIMIT 149, 1")
+    for row in cur:
+        last_row = row
+    check = []
+    for entry in last_row:
+        check.append(entry)
+    if (check[8] == total and check[2:7] == data[0:5]):
         print("No new data.")
         exit()
-    if csv[199][8] == 0 and csv[199][7] == 0:
-        print("Data not fetched correctly.")
-        exit()
 
-with open("NickData.csv", 'r') as f:
-    with open("NickDataX.csv", 'w') as f1:
-        next(f)
-        for line in f:
-            f1.write(line)
-os.remove("NickData.csv")
-os.rename("NickDataX.csv", "NickData.csv")
-data = [
-    now.strftime("%m/%d/%Y"),
-    now.strftime("%H:%M"),
-    level1,
-    level2,
-    level3,
-    ph,
-    track,
-    courts,
-    total,
-]
-with open("NickData.csv", "a", newline="") as file:
-    writer_object = writer(file)
-    writer_object.writerow(data)
-    file.close()
+    # insert new data
+    cur.execute(f"""INSERT INTO NickData 
+    (Date,Time,Level1,Level2,Level3,
+    PowerHouse,Track,Courts,Total) 
+    VALUES ('{date}','{time}',{data[0]},{data[1]},{data[2]},
+    {data[3]},{data[4]},{courts},{total})""")
+    # remove oldest entry
+    cur.execute("DELETE FROM NickData LIMIT 1")
+    conn.commit()
+except:
+    pass
 
-print(now.strftime("%H:%M"))
-
-repo.index.add(['NickData.csv'])
-repo.index.commit('Data upload')
-repo.remotes.origin.push()
+conn.close()

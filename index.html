@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Nick Data</title>
+  </head>
+</html>
+<body>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <div id="container">
+    <div id="btnGroup">
+      <button id="l1" onclick="btnFunc('l1')">LEVEL 1</button>
+      <button id="l2" onclick="btnFunc('l2')">LEVEL 2</button>
+      <button id="l3" onclick="btnFunc('l3')">LEVEL 3</button>
+      <button id="ph" onclick="btnFunc('ph')">POWER HOUSE</button>
+      <button id="track" onclick="btnFunc('track')">TRACK</button>
+      <button id="courts" onclick="btnFunc('courts')">COURTS</button>
+      <button id="total" aria-pressed="true" onclick="btnFunc('total')">
+        TOTAL
+      </button>
+    </div>
+    <div id="text">
+      <p id="lastUpdated">Last updated on</p>
+    </div>
+    <br />
+    <canvas id="myChart"></canvas>
+  </div>
+
+  <script src="./graph.js"></script>
+</body>
+
+<style>
+  button {
+    color: rgb(232, 234, 246);
+    background-color: rgb(214, 0, 0);
+    border: 1px solid;
+    border-color: rgb(156, 0, 0);
+    padding: 10px;
+    margin: 0px;
+    box-shadow: 0px 6px rgb(105, 40, 54);
+    width: 125px;
+    cursor: pointer;
+    transition-duration: 0.3s;
+    font-family: Helvetica, sans-serif;
+  }
+
+  button:hover {
+    background-color: rgb(255, 81, 49);
+  }
+
+  [aria-pressed="true"] {
+    background-color: rgb(156, 0, 0);
+    box-shadow: 0px 2px rgb(43, 0, 0);
+    color: rgb(232, 234, 246);
+    transform: translateY(4px);
+  }
+
+  [aria-pressed="true"]:hover {
+    background-color: rgb(156, 0, 0);
+    box-shadow: 0px 2px rgb(43, 0, 0);
+    color: rgb(232, 234, 246);
+    cursor: default;
+  }
+
+  #l1 {
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+  }
+  #total {
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+  }
+  #lastUpdated {
+    margin: 10px;
+    padding: 0px;
+    color: darkgray;
+  }
+
+  #myChart {
+    margin: 0px;
+    width: 50%;
+    height: 50%;
+  }
+  #container {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    width: 95%;
+    height: 85%;
+  }
+  #btnGroup {
+    display: flex;
+    justify-content: center;
+  }
+  #text {
+    display: flex;
+    justify-content: right;
+    margin: 0px;
+    padding: 0px;
+  }
+</style>

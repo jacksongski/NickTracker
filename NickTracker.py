@@ -81,6 +81,7 @@ try:
         exit()
     elif total == 0 and courts == 0:
         print(f"Data fetched incorrectly. [{date} at {time}]")
+        exit()
 
     # insert new data
     cur.execute(f"""INSERT INTO NickData 

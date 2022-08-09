@@ -13,12 +13,6 @@ from dotenv import main
 
 main.load_dotenv()
 
-# print(os.getenv('USERNAME'))
-# print(os.getenv('PASSWORD'))
-# print(os.getenv('DATABASE'))
-# print(os.getenv('HOST'))
-# exit()
-
 
 # check for necessary fetch
 now = datetime.now(pytz.timezone("US/Central"))
@@ -31,7 +25,6 @@ options = Options()
 options.BinaryLocation = "/usr/bin/chromium-browser"
 driver_path = "/usr/bin/chromedriver"
 driver = webdriver.Chrome(options=options, service=Service(driver_path))
-# driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
 driver.get("https://recwell.wisc.edu/locations/nick/")
 time.sleep(5)
 soup = BeautifulSoup(driver.page_source, "html.parser")
@@ -52,14 +45,10 @@ time = datetime.now().strftime("%H:%M:%S")
 try:
     conn = mariadb.connect(
         user=os.getenv('USER_TOKEN'),
-        # user='u488779263_jacksongski',
         password=os.getenv('PASSWORD'),
-        # password='database4Gsk!',
         host=os.getenv('HOST'),
-        # host='sql734.main-hosting.eu',
         port=3306,
         database=os.getenv('DATABASE')
-        # database='u488779263_gliski'
 )
 except mariadb.Error as e:
     print(f"Error connecting to MariaDB Platform: {e}")

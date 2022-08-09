@@ -77,7 +77,10 @@ try:
     for entry in last_row:
         check.append(entry)
     if (check[8] == total and check[2:7] == data[0:5]):
-        print("No new data.")
+        print(f"No new data. [{date} at {time}]")
+        exit()
+    elif total == 0 and courts == 0:
+        print(f"Data fetched incorrectly. [{date} at {time}]")
         exit()
 
     # insert new data
@@ -89,6 +92,7 @@ try:
     # remove oldest entry
     cur.execute("DELETE FROM NickData LIMIT 1")
     conn.commit()
+    print(f"Data logged. [{date} at {time}]")
 except:
     pass
 

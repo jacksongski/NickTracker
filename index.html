@@ -2,33 +2,74 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>Nick Data</title>
+    <title>Nick Tracker</title>
   </head>
-</html>
-<body>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-  <div id="container">
-    <div id="btnGroup">
-      <button id="l1" onclick="btnFunc('l1')">LEVEL 1</button>
-      <button id="l2" onclick="btnFunc('l2')">LEVEL 2</button>
-      <button id="l3" onclick="btnFunc('l3')">LEVEL 3</button>
-      <button id="ph" onclick="btnFunc('ph')">POWER HOUSE</button>
-      <button id="track" onclick="btnFunc('track')">TRACK</button>
-      <button id="courts" onclick="btnFunc('courts')">COURTS</button>
-      <button id="total" aria-pressed="true" onclick="btnFunc('total')">
-        TOTAL
-      </button>
+  <body style = "background-color:rgb(250, 240, 240)">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <div id="overlay" onclick="helpPopup(false)">
+      <div id="textbox"><h2>Welcome to the UW Nick Tracker!</h2>
+        <p>This application charts the building occupancy of the 
+          Nicholas Recretion Center from the 
+          <a href="https://recwell.wisc.edu/locations/nick/" style="color:rgb(214, 0, 0)">
+            UW-Madison Recreation & Wellbeing website</a>, and updates as soon as there is new data. 
+        </p>
+        <p>Hover over each data point for more detailed information.</p>
+      </div>
     </div>
-    <div id="text">
-      <p id="lastUpdated">Last updated on</p>
-    </div>
-    <br />
-    <canvas id="myChart"></canvas>
-  </div>
+    <div id="container">
+      <div
+        style="
+          display: flex;
+          flex-wrap: wrap;
+          align-items: center;
+          justify-content: center;
+        "
+      >
+        <div id="timeSelect">
+          <select onchange="timeChange(this)">
+            <option value="all">LAST 10 DAYS</option>
+            <option value="today">TODAY</option>
+          </select>
+        </div>
+        <div id="btnGroup">
+          <button id="l1" onclick="btnFunc('l1')">LEVEL 1</button>
+          <button id="l2" onclick="btnFunc('l2')">LEVEL 2</button>
+          <button id="l3" onclick="btnFunc('l3')">LEVEL 3</button>
+          <button id="ph" onclick="btnFunc('ph')">POWER HOUSE</button>
+          <button id="track" onclick="btnFunc('track')">TRACK</button>
+          <button id="courts" onclick="btnFunc('courts')">COURTS</button>
+          <button id="total" aria-pressed="true" onclick="btnFunc('total')">
+            TOTAL
+          </button>
+        </div>
+        <div id="help" onclick="helpPopup(true)">
+          <h1 style="font-family: Tahoma">?</h1>
+        </div>
+      </div>
 
-  <script src="./graph.js"></script>
-</body>
+      <br />
+      <canvas id="myChart"></canvas>
+      <div id="signature">
+        Created by Jackson Glisczinski
+        <a href="https://github.com/jacksongski/NickTracker"
+          ><img
+            src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png"
+            class="logo"
+            style="right: -30px"
+        /></a>
+        <a href="https://gliski.me"
+          ><img
+            src="https://mpng.subpng.com/20180329/ryq/kisspng-web-development-logo-clip-art-website-5abd34c36a2889.5148891915223492514348.jpg"
+            class="logo"
+            style="right: -60px; width: 16px; height: 16px; bottom: 2px"
+        /></a>
+      </div>
+      <div id="lastUpdated">Last updated on </div>
+    </div>
+    <script src="./graph.js"></script>
+  </body>
+</html>
 
 <style>
   button {
@@ -42,11 +83,29 @@
     width: 125px;
     cursor: pointer;
     transition-duration: 0.3s;
-    font-family: Helvetica, sans-serif;
+    font-family: Tahoma, sans-serif;
+    text-shadow: 1px 1px #000000;
+    font-weight: 550;
   }
 
   button:hover {
     background-color: rgb(255, 81, 49);
+  }
+
+  select {
+    position: relative;
+    color: rgb(232, 234, 246);
+    background-color: rgb(156, 0, 0);
+    border: 1px solid;
+    border-color: rgb(214, 0, 0);
+    padding: 10px;
+    margin: 0px;
+    width: 130px;
+    transition-duration: 0.3s;
+    font-family: Tahoma, sans-serif;
+    text-shadow: 1px 1px #000000;
+    border-radius: 10px;
+    font-weight: 450;
   }
 
   [aria-pressed="true"] {
@@ -67,14 +126,29 @@
     border-top-left-radius: 10px;
     border-bottom-left-radius: 10px;
   }
+
   #total {
     border-top-right-radius: 10px;
     border-bottom-right-radius: 10px;
   }
+
   #lastUpdated {
+    position: relative;
     margin: 10px;
     padding: 0px;
     color: darkgray;
+    text-align: right;
+    font-family: Tahoma;
+    float: right;
+  }
+
+  #signature {
+    display: inline-block;
+    position: relative;
+    margin: 10px;
+    padding: 0px;
+    color: darkgray;
+    font-family: Tahoma;
   }
 
   #myChart {
@@ -82,21 +156,79 @@
     width: 50%;
     height: 50%;
   }
+
   #container {
     position: absolute;
     top: 10px;
     left: 10px;
-    width: 95%;
-    height: 85%;
+    width: 98%;
+    height: 90%;
   }
+
   #btnGroup {
-    display: flex;
+    display: inline-flex;
     justify-content: center;
+    margin-left: 30px;
+    margin-right: 30px;
+    margin-top: 5px;
   }
-  #text {
+
+  .logo {
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    bottom: 0;
+    filter: opacity(0.5);
+  }
+
+  .logo:hover {
+    filter: opacity(1);
+  }
+
+  #overlay {
+    height: 100%;
+    width: 100%;
+    background-color: rgba(208, 78, 78, 0.322);
+    z-index: 1;
+    position: fixed;
+    visibility: hidden;
+  }
+
+  #textbox {
+    text-align: center;
+    width: 400px;
+    background-color: white;
+    z-index: 2;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    margin-top: -100px;
+    margin-left: -200px;
+    border-radius: 10px;
+    padding: 20px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-weight: 600;
     display: flex;
-    justify-content: right;
-    margin: 0px;
-    padding: 0px;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: nowrap;
+    flex-direction: column;
+}
+
+  #timeSelect {
+    justify-content: center;
+    display: block;
+    position: relative;
+    padding-right: 30px;
   }
-</style>
+  
+  #help {
+    justify-content: right;
+    display: inline-flex;
+    color: rgb(156, 0, 0);
+  }
+
+  #help:hover {
+    color: rgb(255, 81, 49);
+    cursor: pointer;
+  }

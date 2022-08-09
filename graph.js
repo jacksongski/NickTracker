@@ -149,7 +149,7 @@ function timeChange(el) {
   if (el.value == "all") {
     currData = resp;
     chart.config._config.data.labels = getLabels();
-    btnFunc("total");
+    btnFunc(document.querySelector("[aria-pressed=true]").id);
   } else {
     currData = [];
     let i = resp.length - 1;
@@ -160,10 +160,8 @@ function timeChange(el) {
       i--;
     }
     newLabels = currData.map((x) => x[1]);
-
     chart.config._config.data.labels = newLabels;
-
-    btnFunc("total");
+    btnFunc(document.querySelector("[aria-pressed=true]").id);
   }
 }
 

@@ -1,0 +1,2 @@
+*/5 * * * * DISPLAY=:0 python /home/jacksongski/NickTracker/NickTracker/NickTracker.py
+*/5 * * * * curl -fsS -m 10 --retry 5 -o /dev/null https://hc-ping.com/e54a0b86-7461-42a0-9451-2f8e62cbcc77
